@@ -435,3 +435,34 @@ func goOnEncryptionError(cCon unsafe.Pointer, errorType C.int) {
 	}
 	con.handler.OnEncryptionError(con, int(errorType))
 }
+
+//export goOnAudioTrackPublishStart
+func goOnAudioTrackPublishStart(cLocalUser unsafe.Pointer, localAudioTrack unsafe.Pointer) {
+	//validity check
+	if cLocalUser == nil {
+		return
+	}
+	// get conn from handle
+
+	con := agoraService.getConFromHandle(cLocalUser, ConTypeCLocalUser)
+	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioMetaDataReceived == nil {
+		return
+	}
+	// note： best practise is never reelase handler until app is exiting
+	con.localUserObserver.OnAudioTrackPublishStart(con.GetLocalUser(), nil)
+}
+
+//export goOnAudioTrackPublishSuccess
+func goOnAudioTrackPublishSuccess(cLocalUser unsafe.Pointer, localAudioTrack unsafe.Pointer) {
+	//validity check
+	if cLocalUser == nil {
+		return
+	}
+	// get conn from handle
+
+	con := agoraService.getConFromHandle(cLocalUser, ConTypeCLocalUser)
+	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioMetaDataReceived == nil {
+		return
+	}
+	con.localUserObserver.OnAudioTrackPublishStart(con.GetLocalUser(), nil)
+}
