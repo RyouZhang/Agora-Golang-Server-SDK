@@ -459,10 +459,9 @@ func goOnAudioTrackPublishSuccess(cLocalUser unsafe.Pointer, localAudioTrack uns
 		return
 	}
 	// get conn from handle
-
 	con := agoraService.getConFromHandle(cLocalUser, ConTypeCLocalUser)
 	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioMetaDataReceived == nil {
 		return
 	}
-	con.localUserObserver.OnAudioTrackPublishStart(con.GetLocalUser(), nil)
+	con.localUserObserver.OnAudioTrackPublishSuccess(con.GetLocalUser(), nil)
 }
