@@ -99,9 +99,8 @@ void cgo_on_user_video_track_state_changed(AGORA_HANDLE agora_local_user, user_i
 }
 
 extern void goOnAudioPublishStateChanged(void* agora_local_user, const char* channelid, int oldstate, int newstate, int elapseSinceLastState);
-void  cgo_on_audio_publish_state_changed(AGORA_HANDLE agora_rtc_conn, const char* channelid, int oldstate, int newstate, int elapseSinceLastState) {
-  goOnAudioPublishStateChanged(agora_rtc_conn, channelid, oldstate, newstate, elapseSinceLastState);
-  
+void  cgo_on_audio_publish_state_changed(AGORA_HANDLE agora_local_user, const char* channelid, int oldstate, int newstate, int elapseSinceLastState) {
+  goOnAudioPublishStateChanged(agora_local_user, channelid, oldstate, newstate, elapseSinceLastState);
 }
 
 extern void goOnAudioVolumeIndication(void* agora_local_user, struct _audio_volume_info* speakers, unsigned int speaker_number, int total_volume);
