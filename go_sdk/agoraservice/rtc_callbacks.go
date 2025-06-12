@@ -445,7 +445,7 @@ func goOnAudioTrackPublishStart(cLocalUser unsafe.Pointer, localAudioTrack unsaf
 	// get conn from handle
 
 	con := agoraService.getConFromHandle(cLocalUser, ConTypeCLocalUser)
-	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioMetaDataReceived == nil {
+	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioTrackPublishStart == nil {
 		return
 	}
 	// note： best practise is never reelase handler until app is exiting
@@ -460,7 +460,7 @@ func goOnAudioTrackPublishSuccess(cLocalUser unsafe.Pointer, localAudioTrack uns
 	}
 	// get conn from handle
 	con := agoraService.getConFromHandle(cLocalUser, ConTypeCLocalUser)
-	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioMetaDataReceived == nil {
+	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioTrackPublishSuccess == nil {
 		return
 	}
 	con.localUserObserver.OnAudioTrackPublishSuccess(con.GetLocalUser(), nil)
