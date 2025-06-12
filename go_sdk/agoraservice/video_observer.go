@@ -26,13 +26,13 @@ func goOnVideoFrame(cObserver unsafe.Pointer, channelId *C.char, uid *C.char, fr
 	if goUid == "0" {
 		return C.int(0)
 	}
-	
+
 	con := agoraService.getConFromHandle(cObserver, ConTypeCVideoObserver)
 	if con == nil || con.videoObserver == nil || con.videoObserver.OnFrame == nil {
 		return C.int(0)
 	}
 	goChannelId := C.GoString(channelId)
-	
+
 	goFrame := GoVideoFrame(frame)
 	ret := con.videoObserver.OnFrame(goChannelId, goUid, goFrame)
 	if ret {

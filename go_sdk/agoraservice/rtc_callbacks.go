@@ -308,7 +308,6 @@ func goOnUserVideoTrackStateChanged(cLocalUser unsafe.Pointer, uid *C.char, cRem
 	con.localUserObserver.OnUserVideoTrackStateChanged(con.GetLocalUser(), C.GoString(uid), con.NewRemoteVideoTrack(cRemoteVideoTrack), int(state), int(reason), int(elapsed))
 }
 
-
 //export goOnAudioVolumeIndication
 func goOnAudioVolumeIndication(cLocalUser unsafe.Pointer, Volumes *C.struct__audio_volume_info, speakerNumber C.uint, totalVolume C.int) {
 	//validity check
@@ -320,7 +319,6 @@ func goOnAudioVolumeIndication(cLocalUser unsafe.Pointer, Volumes *C.struct__aud
 	if con == nil || con.localUserObserver == nil || con.localUserObserver.OnAudioVolumeIndication == nil {
 		return
 	}
-
 
 	// item := C.GoBytes(unsafe.Pointer(Volumes), C.int(unsafe.Sizeof(Volumes))) and assign to a list
 	//todo?? move to file end
@@ -339,7 +337,6 @@ func goOnAudioVolumeIndication(cLocalUser unsafe.Pointer, Volumes *C.struct__aud
 	con.localUserObserver.OnAudioVolumeIndication(con.GetLocalUser(), frames, int(speakerNumber), int(totalVolume))
 }
 
-
 //export goOnAudioPublishStateChanged
 func goOnAudioPublishStateChanged(cLocalUser unsafe.Pointer, channel *C.char, oldState C.int, newState C.int, elapseSinceLastState C.int) {
 	//validity check
@@ -353,6 +350,7 @@ func goOnAudioPublishStateChanged(cLocalUser unsafe.Pointer, channel *C.char, ol
 	}
 	con.localUserObserver.OnAudioPublishStateChanged(con.GetLocalUser(), C.GoString(channel), int(oldState), int(newState), int(elapseSinceLastState))
 }
+
 //export goOnAudioMetadataReceived
 func goOnAudioMetadataReceived(cLocalUser unsafe.Pointer, uid *C.char, metaData *C.char, length C.size_t) {
 	//validity check
@@ -365,8 +363,9 @@ func goOnAudioMetadataReceived(cLocalUser unsafe.Pointer, uid *C.char, metaData 
 		return
 	}
 	// note： best practise is never reelase handler until app is exiting
-	con.localUserObserver.OnAudioMetaDataReceived(con.GetLocalUser(), C.GoString(uid), C.GoBytes(unsafe.Pointer(metaData),C.int(length)))
+	con.localUserObserver.OnAudioMetaDataReceived(con.GetLocalUser(), C.GoString(uid), C.GoBytes(unsafe.Pointer(metaData), C.int(length)))
 }
+
 //export goOnLocalAudioTrackStatistics
 func goOnLocalAudioTrackStatistics(cLocalUser unsafe.Pointer, stats *C.struct__local_audio_stats) {
 	//validity check
@@ -380,6 +379,7 @@ func goOnLocalAudioTrackStatistics(cLocalUser unsafe.Pointer, stats *C.struct__l
 	}
 	con.localUserObserver.OnLocalAudioTrackStatistics(con.GetLocalUser(), GoLocalAudioStats(stats))
 }
+
 //export goOnRemoteAudioTrackStatistics
 func goOnRemoteAudioTrackStatistics(cLocalUser unsafe.Pointer, uid *C.char, stats *C.struct__remote_audio_stats) {
 	//validity check
@@ -393,6 +393,7 @@ func goOnRemoteAudioTrackStatistics(cLocalUser unsafe.Pointer, uid *C.char, stat
 	}
 	con.localUserObserver.OnRemoteAudioTrackStatistics(con.GetLocalUser(), C.GoString(uid), GoRemoteAudioStats(stats))
 }
+
 //export goOnLocalVideoTrackStatistics
 func goOnLocalVideoTrackStatistics(cLocalUser unsafe.Pointer, stats *C.struct__local_video_track_stats) {
 	//validity check
@@ -406,6 +407,7 @@ func goOnLocalVideoTrackStatistics(cLocalUser unsafe.Pointer, stats *C.struct__l
 	}
 	con.localUserObserver.OnLocalVideoTrackStatistics(con.GetLocalUser(), GoLocalVideoStats(stats))
 }
+
 //export goOnRemoteVideoTrackStatistics
 func goOnRemoteVideoTrackStatistics(cLocalUser unsafe.Pointer, uid *C.char, stats *C.struct__remote_video_track_stats) {
 	//validity check
@@ -419,6 +421,7 @@ func goOnRemoteVideoTrackStatistics(cLocalUser unsafe.Pointer, uid *C.char, stat
 	}
 	con.localUserObserver.OnRemoteVideoTrackStatistics(con.GetLocalUser(), C.GoString(uid), GoRemoteVideoStats(stats))
 }
+
 //export goOnEncryptionError
 func goOnEncryptionError(cCon unsafe.Pointer, errorType C.int) {
 	//validity check

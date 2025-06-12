@@ -139,3 +139,15 @@ extern void goOnEncryptionError(void* agora_rtc_conn, int error_type);
 void cgo_on_encryption_error(AGORA_HANDLE agora_rtc_conn, int error_type) {
   goOnEncryptionError(agora_rtc_conn, error_type);
 }
+
+
+//ryou 
+extern void goOnAudioTrackPublishStart(void* agora_local_user, void* agora_local_audio_track);
+void cgo_on_audio_track_publish_start(AGORA_HANDLE agora_local_user, AGORA_HANDLE agora_local_audio_track) {
+  goOnAudioTrackPublishStart(agora_local_user, agora_local_audio_track);
+}
+
+extern void goOnAudioTrackPublishSuccess(void* agora_local_user, void* agora_local_audio_track);
+void cgo_on_audio_track_publish_success(AGORA_HANDLE agora_local_user, AGORA_HANDLE agora_local_audio_track) {
+  goOnAudioTrackPublishSuccess(agora_local_user, agora_local_audio_track);
+}

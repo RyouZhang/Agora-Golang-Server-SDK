@@ -5,20 +5,19 @@ package agoraservice
 // #include "agora_parameter.h"
 import (
 	"bytes"
+	"encoding/binary"
 	"fmt"
 	"os"
 	"sync"
 	"time"
-	"encoding/binary"
 )
 
 // AudioConsumer provides utility functions for the Agora SDK.
-// const def 
+// const def
 const (
-	MinPacketsToSend = 10 // change min packets to send from 18 to 10
-	RtcE2EDelay = 200 //e2e delay 90ms for iphone, 120ms for android;150ms for web. so we use 200ms here
+	MinPacketsToSend = 10  // change min packets to send from 18 to 10
+	RtcE2EDelay      = 200 //e2e delay 90ms for iphone, 120ms for android;150ms for web. so we use 200ms here
 )
-
 
 // AudioConsumer handles PCM data consumption and sending
 type AudioConsumer struct {
@@ -34,7 +33,7 @@ type AudioConsumer struct {
 	samplesPerChannel int
 
 	// State
-	isInitialized bool
+	isInitialized     bool
 	lastConsumeedTime int64 // in ms
 }
 
@@ -56,7 +55,7 @@ func NewAudioConsumer(pcmSender *AudioPcmDataSender, sampleRate int, channels in
 			Buffer:         make([]byte, 0, bytesPerFrame), // Pre-allocate frame buffer
 		},
 		bytesPerFrame:     bytesPerFrame,
-		samplesPerChannel: sampleRate / 100 ,
+		samplesPerChannel: sampleRate / 100,
 		isInitialized:     true,
 		lastConsumeedTime: 0,
 	}
@@ -99,7 +98,7 @@ func (ac *AudioConsumer) Consume() int {
 
 	dataLen := ac.buffer.Len()
 	if dataLen > 0 {
-	    ac.lastConsumeedTime = now
+		ac.lastConsumeedTime = now
 	}
 
 	// Handle underflow
@@ -141,7 +140,7 @@ func (ac *AudioConsumer) Consume() int {
 		}
 		// for quickly release buffer
 		ac.frame.Buffer = nil
-		frameData	= nil
+		frameData = nil
 		return ret
 	}
 
@@ -159,7 +158,9 @@ func (ac *AudioConsumer) Clear() {
 	defer ac.mu.Unlock()
 	ac.buffer.Reset()
 }
-/*判断AudioConsumer中的数据是否已经完全推送给了RTC 频道
+
+/*
+判断AudioConsumer中的数据是否已经完全推送给了RTC 频道
 //因为audioconsumer内部有一定的缓存机制，所以当get_remaining_data_size 返回是0的时候，还有数据没有推送给
 rtc 频道。如果要判断数据是否完全推送给了rtc 频道，需要调用这个api来做判断。
 return value：1--push to rtc completed, 0--push to rtc not completed   -1--error
@@ -169,18 +170,17 @@ func (ac *AudioConsumer) IsPushToRtcCompleted() int {
 		return -1
 	}
 	// no need to lock, because this function is only called in the main thread
-	
+
 	remain_size := ac.buffer.Len()
 	if remain_size == 0 {
 		now := time.Now().UnixMilli()
 		diff := now - ac.lastConsumeedTime
-		if diff > MinPacketsToSend*10 + RtcE2EDelay {
+		if diff > MinPacketsToSend*10+RtcE2EDelay {
 			return 1
 		}
 	}
 	return 0
 }
-
 
 // Release frees resources
 func (ac *AudioConsumer) Release() {
@@ -369,6 +369,7 @@ func (v *VadDump) Close() int {
 	v.count = 0
 	return 0
 }
+
 //why use queue instead of chan?
 // 1. chan is not thread-safe, so we need to use mutex to protect the queue;
 // 2. chan is blocking, so we need to use select to avoid blocking;
@@ -436,7 +437,7 @@ func (q *Queue) Dequeue() interface{} {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 	size = len(q.items)
-	if (size > 0) {
+	if size > 0 {
 		item := q.items[0]
 		q.items = q.items[1:]
 		return item

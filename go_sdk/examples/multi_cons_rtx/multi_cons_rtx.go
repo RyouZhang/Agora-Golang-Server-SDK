@@ -49,14 +49,14 @@ type TaskConfig struct {
 	dumpYuv          bool
 	dumpEncodedVideo bool
 
-	taskTime int64
-	pcmFilePath      string
+	taskTime             int64
+	pcmFilePath          string
 	encodedAudioFilePath string
 	yuvFilePath          string
 	encodedVideoFilePath string
 	role                 int
 	sendVideoFps         int
-	sendVideoMinBitrate int
+	sendVideoMinBitrate  int
 	sendVideoBitrate     int
 	sendYuvWidth         int
 	sendYuvHeight        int
@@ -126,7 +126,6 @@ func main() {
 			log.Println(http.ListenAndServe(":6060", nil))
 		}()
 	}
-	
 
 	// parse command options
 	var (
@@ -151,7 +150,7 @@ func main() {
 		randTask  = flag.Bool("randTask", false, "Enable Randomly restart task")
 
 		// role
-		role        = flag.Int("role", 1, "Descprtion: 1 for host, 0 for client")
+		role = flag.Int("role", 1, "Descprtion: 1 for host, 0 for client")
 		// pcm file path
 		pcmFilePath = flag.String("pcmFilePath", "", "Descprtion: Pcm file path")
 		// encoded audio file path
@@ -159,18 +158,18 @@ func main() {
 		// yuv file path
 		yuvFilePath = flag.String("yuvFilePath", "", "Descprtion: Yuv file path")
 		// encoded video file path
-		encodedVideoFilePath = flag.String("encodedVideoFilePath", "", "Descprtion: Encoded video file path")	
+		encodedVideoFilePath = flag.String("encodedVideoFilePath", "", "Descprtion: Encoded video file path")
 
 		// send video parameter: fps, min bitrate, bitrate
-		sendVideoFps = flag.Int("sendVideoFps", 15, "Descprtion: Send video fps")
+		sendVideoFps        = flag.Int("sendVideoFps", 15, "Descprtion: Send video fps")
 		sendVideoMinBitrate = flag.Int("sendVideoMinBitrate", 100, "Descprtion: Send video min bitrate")
-		sendVideoBitrate = flag.Int("sendVideoBitrate", 500, "Descprtion: Send video bitrate")
-		sendYuvWidth = flag.Int("sendYuvWidth", 640, "Descprtion: Send yuv width")
-		sendYuvHeight = flag.Int("sendYuvHeight", 360, "Descprtion: Send yuv height")
+		sendVideoBitrate    = flag.Int("sendVideoBitrate", 500, "Descprtion: Send video bitrate")
+		sendYuvWidth        = flag.Int("sendYuvWidth", 640, "Descprtion: Send yuv width")
+		sendYuvHeight       = flag.Int("sendYuvHeight", 360, "Descprtion: Send yuv height")
 	)
 
 	flag.Parse()
-	
+
 	fmt.Println("channelName:", *channelName)
 	fmt.Println("sendYuv:", *sendYuv)
 	fmt.Println("sendEncodedVideo:", *sendEncodedVideo)
@@ -210,13 +209,11 @@ func main() {
 	if *sendPcm && *pcmFilePath == "" {
 		fmt.Println("pcmFilePath is required when sendPcm is true")
 		return
-	}	
+	}
 	if *sendEncodedAudio && *encodedAudioFilePath == "" {
 		fmt.Println("encodedAudioFilePath is required when sendEncodedAudio is true")
 		return
 	}
-	
-	
 
 	globalCtx := globalInit()
 	if globalCtx == nil {
@@ -243,19 +240,19 @@ func main() {
 		recvPcm:          *recvPcm,
 		recvData:         *recvData,
 
-		dumpPcm:          *dumpPcm,
-		dumpYuv:          *dumpYuv,
-		dumpEncodedVideo: *dumpEncodedVideo,
-		pcmFilePath:      *pcmFilePath,
+		dumpPcm:              *dumpPcm,
+		dumpYuv:              *dumpYuv,
+		dumpEncodedVideo:     *dumpEncodedVideo,
+		pcmFilePath:          *pcmFilePath,
 		encodedAudioFilePath: *encodedAudioFilePath,
-		yuvFilePath: *yuvFilePath,
+		yuvFilePath:          *yuvFilePath,
 		encodedVideoFilePath: *encodedVideoFilePath,
-		role:             *role,
+		role:                 *role,
 		sendVideoFps:         *sendVideoFps,
-		sendVideoMinBitrate: *sendVideoMinBitrate,
+		sendVideoMinBitrate:  *sendVideoMinBitrate,
 		sendVideoBitrate:     *sendVideoBitrate,
-		sendYuvWidth: *sendYuvWidth,
-		sendYuvHeight: *sendYuvHeight,
+		sendYuvWidth:         *sendYuvWidth,
+		sendYuvHeight:        *sendYuvHeight,
 	}
 	for i := 0; i < *taskCount; i++ {
 		globalCtx.waitTasks.Add(1)

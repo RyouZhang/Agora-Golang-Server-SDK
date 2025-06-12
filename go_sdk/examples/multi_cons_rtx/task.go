@@ -345,7 +345,7 @@ func (taskCtx *TaskContext) sendEncodedVideo(taskCfg *TaskConfig) {
 
 	//sendInterval := 1000 * int64(codecParam.framerate.den) / int64(codecParam.framerate.num)
 	//change sendInterval to configured value not the file framerate
-	sendInterval := 1000 / taskCfg.sendVideoFps	
+	sendInterval := 1000 / taskCfg.sendVideoFps
 	ticker := time.NewTicker(time.Duration(sendInterval) * time.Millisecond)
 	defer ticker.Stop()
 	for {
@@ -414,7 +414,7 @@ func (taskCtx *TaskContext) startTask() {
 	cfg := taskCtx.cfg
 
 	var channelName string
-	if cfg.role == 1 {  // for broadcaster
+	if cfg.role == 1 { // for broadcaster
 		channelName = fmt.Sprintf("%s%d", globalCtx.channelNamePrefix, id)
 	} else {
 		channelName = globalCtx.channelNamePrefix
@@ -426,7 +426,6 @@ func (taskCtx *TaskContext) startTask() {
 		return
 	}
 
-	
 	if cfg.taskTime > 0 {
 		ctx, cancel := context.WithTimeout(taskCtx.ctx, time.Duration(cfg.taskTime)*time.Second)
 		taskCtx.ctx = ctx
@@ -496,7 +495,7 @@ func (taskCtx *TaskContext) startTask() {
 	}
 
 	con := agoraservice.NewRtcConnection(&agoraservice.RtcConnectionConfig{
-		AutoSubscribeAudio: cfg.recvPcm ,
+		AutoSubscribeAudio: cfg.recvPcm,
 		AutoSubscribeVideo: cfg.recvYuv || cfg.recvEncodedVideo,
 		ClientRole:         role, //agoraservice.ClientRoleBroadcaster,
 		ChannelProfile:     agoraservice.ChannelProfileLiveBroadcasting,
@@ -633,7 +632,7 @@ func (taskCtx *TaskContext) startTask() {
 			},
 		}
 		subvideoopt := &agoraservice.VideoSubscriptionOptions{
-			StreamType: agoraservice.VideoStreamHigh,
+			StreamType:       agoraservice.VideoStreamHigh,
 			EncodedFrameOnly: true,
 		}
 		localUser.SubscribeAllVideo(subvideoopt)

@@ -114,14 +114,13 @@ func goOnPlaybackAudioFrameBeforeMixing(cLocalUser unsafe.Pointer, channelId *C.
 	var ret bool = false
 	var vadResultFrame *AudioFrame = nil
 	var vadResultStat VadState = VadStateInvalid
-	
+
 	if con.audioVadManager != nil {
 		vadResultFrame, vadResultStat = con.audioVadManager.Process(goChannelId, goUid, goFrame)
 	}
 	ret = con.audioObserver.OnPlaybackAudioFrameBeforeMixing(con.GetLocalUser(), goChannelId, goUid, goFrame, vadResultStat, vadResultFrame)
 
-	
-	if ret  {
+	if ret {
 		return C.int(1)
 	}
 	return C.int(0)

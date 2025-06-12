@@ -201,28 +201,26 @@ func main() {
 		},
 	}
 	// for calling onFrame
-	
+
 	videoObserver := &agoraservice.VideoFrameObserver{
 		OnFrame: func(channelId string, userId string, frame *agoraservice.VideoFrame) bool {
 			if frame == nil {
 				return true
 
 			}
-			
+
 			//fmt.Printf("recv video frame, from channel %s, user %s, type %d, width %d, height %d, stride %d, ysize %d, usize %d, vsize %d\n",channelId, userId, frame.Type, frame.Width, frame.Height, frame.YStride, len(frame.YBuffer), len(frame.UBuffer), len(frame.VBuffer))
 
 			yuvQueue.Enqueue(frame)
-			
 
 			return true
 		},
 	}
-	
+
 	var err error
 	audioObserver := &agoraservice.AudioFrameObserver{
 		OnPlaybackAudioFrameBeforeMixing: func(localUser *agoraservice.LocalUser, channelId string, userId string, frame *agoraservice.AudioFrame, vadResulatState agoraservice.VadState, vadResultFrame *agoraservice.AudioFrame) bool {
 			// do something: for play a file
-			
 
 			pcmQueue.Enqueue(frame)
 			//fmt.Printf("Playback audio frame before mixing, from userId %s, far :%d,rms:%d, pitch: %d\n", userId, frame.FarFieldFlag, frame.Rms, frame.Pitch)
@@ -318,8 +316,6 @@ func main() {
 	//localuserobserver
 	localUser.RegisterLocalUserObserver(localUserObserver)
 
-	
-
 	con.Connect(token, channelName, userId)
 	<-conSignal
 
@@ -342,14 +338,10 @@ func main() {
 
 	// for yuv test
 
-	
-
-	
 	// rgag colos space type test
 
 	for !*bStop {
-		
-		
+
 		time.Sleep(33 * time.Millisecond)
 	}
 	close(done)

@@ -31,15 +31,14 @@ var leftCount int = 0
 var rightCount int = 0
 
 func DebugSteroPcmSource(filePath string) {
-	// only for 16000 16bit 1channel PCM, and 160 samples per channel	
+	// only for 16000 16bit 1channel PCM, and 160 samples per channel
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0644)
 	if err != nil {
 		fmt.Println("Failed to open file: ", err)
 		return
-	}	
+	}
 	defer file.Close()
 
-	
 	// open stero vad for debug
 	vadConfigV1 := &agoraservice.AudioVadConfig{
 		StartRecognizeCount:    30,
@@ -56,9 +55,8 @@ func DebugSteroPcmSource(filePath string) {
 	defer steroVadInst.Release()
 
 	sourcfile, err := os.OpenFile("./source_dump.pcm", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
-	
+
 	defer sourcfile.Close()
-	
 
 	buffer := make([]byte, 640) // 100ms
 	frame := &agoraservice.AudioFrame{
@@ -77,29 +75,27 @@ func DebugSteroPcmSource(filePath string) {
 			break
 		}
 		if n < 640 {
-			break;
+			break
 		}
 		frameCount++
 		readed := n
-		
-		
+
 		// process stero vad
 		frame.Buffer = buffer
 		leftFrame, leftState, rightFrame, rightState := steroVadInst.ProcessAudioFrame(frame)
 		fmt.Printf("n: %d-%d, left: %d, right: %d   ", readed, len(buffer), leftState, rightState)
 		dumpSteroVadResult(1, leftFrame, leftState)
 		dumpSteroVadResult(0, rightFrame, rightState)
-		
+
 	}
-	
-	
+
 }
 
 func dumpSteroVadResult(isleft int, frame *agoraservice.AudioFrame, result int) {
-	if (result == 1 || result == 2 || result == 3) {
+	if result == 1 || result == 2 || result == 3 {
 		// open the file for dump
-		if (isleft == 1) {
-			if (LeftVadFile == nil) {
+		if isleft == 1 {
+			if LeftVadFile == nil {
 				LeftVadFile, _ = os.Create(fmt.Sprintf("./left_vad_dump_%d.pcm", leftCount))
 			}
 			LeftVadFile.Write(frame.Buffer)
@@ -111,11 +107,11 @@ func dumpSteroVadResult(isleft int, frame *agoraservice.AudioFrame, result int) 
 		}
 
 		if result == 3 {
-		    if (isleft == 1) {
+			if isleft == 1 {
 				leftCount++
 				LeftVadFile.Close()
 				LeftVadFile = nil
-		    } else {
+			} else {
 				rightCount++
 				RightVadFile.Close()
 				RightVadFile = nil
@@ -124,6 +120,7 @@ func dumpSteroVadResult(isleft int, frame *agoraservice.AudioFrame, result int) 
 	}
 
 }
+
 // for file vad test: stereo vad file test
 func file_vad_main() {
 	DebugSteroPcmSource("/Users/weihognqin/Downloads/output_case1_1.pcm")
@@ -162,7 +159,7 @@ func offline_vad1_test() {
 		Aggressive:             2.0,
 		VoiceProb:              0.7,
 	}
-	
+
 	var chunk int = 320
 
 	var monoVadInst *agoraservice.AudioVad = nil
@@ -171,15 +168,14 @@ func offline_vad1_test() {
 		monoVadInst = agoraservice.NewAudioVad(vadConfigV1)
 		chunk = 320
 		defer monoVadInst.Release()
-	} else {	
+	} else {
 		steroVadInst = agoraservice.NewSteroVad(vadConfigV1, vadConfigV1)
 		chunk = 640
 		defer steroVadInst.Release()
 	}
-	
-	
+
 	//time.Sleep(1000 * time.Millisecond)
-	
+
 	// read the file
 	buffer := make([]byte, chunk)
 	frame := &agoraservice.AudioFrame{
@@ -189,46 +185,42 @@ func offline_vad1_test() {
 		Buffer:         nil, // Pre-allocate frame buffer
 	}
 	frameCount := 0
-	
+
 	vadfile, _ := os.Create("./vad_dump.pcm")
 	defer vadfile.Close()
 	//go func ()  {
-		
+
 	var leftFrame *agoraservice.AudioFrame = nil
 	var leftState int = 0
 	var rightFrame *agoraservice.AudioFrame = nil
 	var rightState int = 0
-	
+
 	for {
 		n, err := file.Read(buffer)
 		if err != nil {
 			break
 		}
 		if n < chunk {
-			break;
+			break
 		}
-		
+
 		// process stero vad
 		frame.Buffer = buffer[:n]
-		
+
 		if channels == 1 {
 			leftFrame, leftState = monoVadInst.ProcessPcmFrame(frame)
 			if leftState == 1 || leftState == 2 || leftState == 3 {
 				vadfile.Write(leftFrame.Buffer)
 			}
-			fmt.Printf("count: %d-%d, left: %d, right: %d\n", frameCount, n	, leftState, len(leftFrame.Buffer))
-			
+			fmt.Printf("count: %d-%d, left: %d, right: %d\n", frameCount, n, leftState, len(leftFrame.Buffer))
+
 		} else {
 			leftFrame, leftState, rightFrame, rightState = steroVadInst.ProcessAudioFrame(frame)
-			fmt.Printf("count: %d-%d, left: %d, right: %d\n", frameCount, n	, leftState, rightState)
+			fmt.Printf("count: %d-%d, left: %d, right: %d\n", frameCount, n, leftState, rightState)
 			dumpSteroVadResult(1, leftFrame, leftState)
 			dumpSteroVadResult(0, rightFrame, rightState)
 		}
-		
-		
 
-		
-		
 		frameCount++
 	}
 	//signal <- struct{}{}
@@ -283,7 +275,7 @@ func original_main() {
 		appid = os.Getenv("AGORA_APP_ID")
 	}
 	cert := os.Getenv("AGORA_APP_CERTIFICATE")
-	userId := "0"	
+	userId := "0"
 	if appid == "" {
 		fmt.Println("Please set AGORA_APP_ID environment variable, and AGORA_APP_CERTIFICATE if needed")
 		return

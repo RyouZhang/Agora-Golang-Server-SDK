@@ -87,9 +87,9 @@ const (
 // It manages the lifecycle of the Agora SDK and provides methods to interact with the SDK.
 // It is a singleton, so you should not create multiple instances of it.
 type AgoraService struct {
-	inited  bool
-	service unsafe.Pointer
-	isLowDelay bool
+	inited            bool
+	service           unsafe.Pointer
+	isLowDelay        bool
 	isSteroEncodeMode bool
 	// mediaFactory         unsafe.Pointer
 	consByCCon                  sync.Map
@@ -101,9 +101,9 @@ type AgoraService struct {
 // / newAgoraService creates a new instance of AgoraService
 func newAgoraService() *AgoraService {
 	return &AgoraService{
-		inited:  false,
-		service: nil,
-		isLowDelay: false,
+		inited:            false,
+		service:           nil,
+		isLowDelay:        false,
 		isSteroEncodeMode: false,
 	}
 }
@@ -112,19 +112,19 @@ var agoraService *AgoraService = newAgoraService()
 
 func NewAgoraServiceConfig() *AgoraServiceConfig {
 	return &AgoraServiceConfig{
-		EnableAudioProcessor: true,
-		EnableAudioDevice:    false,
-		EnableVideo:          false,
-		AppId:                "",
-		AreaCode:             AreaCodeGlob,
-		ChannelProfile:       ChannelProfileLiveBroadcasting,
-		AudioScenario:        AudioScenarioChorus,
-		UseStringUid:         false,
-		LogPath:              "./agora_rtc_log/agorasdk.log",
-		LogSize:              1024 * 1024,
-		DomainLimit: 0, // default to 0
+		EnableAudioProcessor:    true,
+		EnableAudioDevice:       false,
+		EnableVideo:             false,
+		AppId:                   "",
+		AreaCode:                AreaCodeGlob,
+		ChannelProfile:          ChannelProfileLiveBroadcasting,
+		AudioScenario:           AudioScenarioChorus,
+		UseStringUid:            false,
+		LogPath:                 "./agora_rtc_log/agorasdk.log",
+		LogSize:                 1024 * 1024,
+		DomainLimit:             0, // default to 0
 		ShouldCallbackWhenMuted: 0, // default to 0, no callback when muted
-		EnableSteroEncodeMode: 0, // default to 0,i.e default to mono encode mode
+		EnableSteroEncodeMode:   0, // default to 0,i.e default to mono encode mode
 	}
 }
 
@@ -158,8 +158,8 @@ func Initialize(cfg *AgoraServiceConfig) int {
 	C.agora_parameter_set_int(cParam, cParamStr, C.int(17))
 
 	agoraParam := GetAgoraParameter()
-	
-	if (cfg.EnableSteroEncodeMode < 1) { // disable stereo encode mode,can enabel audio label
+
+	if cfg.EnableSteroEncodeMode < 1 { // disable stereo encode mode,can enabel audio label
 		// enable audio label generator
 		EnableExtension("agora.builtin", "agora_audio_label_generator", "", true)
 
@@ -259,43 +259,43 @@ func GetAgoraParameter() *AgoraParameter {
 
 // add cleanup method
 func (s *AgoraService) cleanup() {
-    // Clean all connections and release associated resources
-    s.consByCCon.Range(func(key, value interface{}) bool {
-        if conn, ok := value.(*RtcConnection); ok && conn != nil {
-            // Perform any necessary cleanup for the connection
-            
-        }
-        s.consByCCon.Delete(key)
-        return true
-    })
+	// Clean all connections and release associated resources
+	s.consByCCon.Range(func(key, value interface{}) bool {
+		if conn, ok := value.(*RtcConnection); ok && conn != nil {
+			// Perform any necessary cleanup for the connection
 
-    s.consByCLocalUser.Range(func(key, value interface{}) bool {
-        if conn, ok := value.(*RtcConnection); ok && conn != nil {
-            //conn.Close()  // do not call this method, it should be called by user
-        }
-        s.consByCLocalUser.Delete(key)
-        return true
-    })
+		}
+		s.consByCCon.Delete(key)
+		return true
+	})
 
-    s.consByCVideoObserver.Range(func(key, value interface{}) bool {
-        if conn, ok := value.(*RtcConnection); ok && conn != nil {
-        }
-        s.consByCVideoObserver.Delete(key)
-        return true
-    })
+	s.consByCLocalUser.Range(func(key, value interface{}) bool {
+		if conn, ok := value.(*RtcConnection); ok && conn != nil {
+			//conn.Close()  // do not call this method, it should be called by user
+		}
+		s.consByCLocalUser.Delete(key)
+		return true
+	})
 
-    s.consByCEncodedVideoObserver.Range(func(key, value interface{}) bool {
-        if conn, ok := value.(*RtcConnection); ok && conn != nil {
-        }
-        s.consByCEncodedVideoObserver.Delete(key)
-        return true
-    })
+	s.consByCVideoObserver.Range(func(key, value interface{}) bool {
+		if conn, ok := value.(*RtcConnection); ok && conn != nil {
+		}
+		s.consByCVideoObserver.Delete(key)
+		return true
+	})
 
-    // After cleaning up all connections, set maps to nil
-    s.consByCCon = sync.Map{}
-    s.consByCLocalUser = sync.Map{}
-    s.consByCVideoObserver = sync.Map{}
-    s.consByCEncodedVideoObserver = sync.Map{}
+	s.consByCEncodedVideoObserver.Range(func(key, value interface{}) bool {
+		if conn, ok := value.(*RtcConnection); ok && conn != nil {
+		}
+		s.consByCEncodedVideoObserver.Delete(key)
+		return true
+	})
+
+	// After cleaning up all connections, set maps to nil
+	s.consByCCon = sync.Map{}
+	s.consByCLocalUser = sync.Map{}
+	s.consByCVideoObserver = sync.Map{}
+	s.consByCEncodedVideoObserver = sync.Map{}
 }
 
 // to get value from sync.Map, use Load method

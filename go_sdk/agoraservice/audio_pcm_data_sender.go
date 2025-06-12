@@ -67,7 +67,7 @@ func (sender *AudioPcmDataSender) Release() {
 }
 
 func (sender *AudioPcmDataSender) SendAudioPcmData(frame *AudioFrame) int {
-	if sender.closed || sender.cSender == nil || frame == nil  {
+	if sender.closed || sender.cSender == nil || frame == nil {
 		return -1
 	}
 	sender.mu.RLock()

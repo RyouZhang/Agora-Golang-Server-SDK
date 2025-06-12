@@ -100,3 +100,7 @@ extern void cgo_on_remote_audio_track_statistics(AGORA_HANDLE agora_local_user, 
 extern void cgo_on_local_video_track_statistics(AGORA_HANDLE agora_local_user, const local_video_track_stats* stats);
 extern void cgo_on_remote_video_track_statistics(AGORA_HANDLE agora_local_user, user_id_t userId, const remote_video_track_stats* stats);
 extern void cgo_on_encryption_error(AGORA_HANDLE agora_rtc_conn, int error_type);
+
+// ryou
+extern void cgo_on_audio_track_publish_start(AGORA_HANDLE agora_local_user, AGORA_HANDLE agora_local_audio_track);
+extern void cgo_on_audio_track_publish_success(AGORA_HANDLE agora_local_user, AGORA_HANDLE agora_local_audio_track);

@@ -106,11 +106,11 @@ func main() {
 		OnFrame: func(channelId string, userId string, frame *agoraservice.VideoFrame) bool {
 			if frame == nil {
 				return true
-			    
+
 			}
 			frameCount++
 			Now := time.Now().UnixMilli()
-			if Now -frameLastRecvTime > 1000 {
+			if Now-frameLastRecvTime > 1000 {
 				fps := int64(frameCount*1000) / (Now - frameLastRecvTime)
 				fmt.Printf("fps, %d fps, %d\n", frameCount, fps)
 				frameCount = 0
@@ -128,9 +128,8 @@ func main() {
 	localUser.RegisterVideoFrameObserver(videoObserver)
 
 	sender := mediaNodeFactory.NewVideoFrameSender()
-	
-	track := agoraservice.NewCustomVideoTrackFrame(sender)
 
+	track := agoraservice.NewCustomVideoTrackFrame(sender)
 
 	con.Connect(token, channelName, userId)
 	<-conSignal
@@ -150,35 +149,35 @@ func main() {
 
 	// for yuv test
 	/*
-	w := 352
-	h := 288
-	dataSize := w * h * 3 / 2
-	data := make([]byte, dataSize)
-	// read yuv from file 103_RaceHorses_416x240p30_300.yuv
-	file, err := os.Open("../test_data/send_video_cif.yuv")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	for !*bStop {
-		dataLen, err := file.Read(data)
-		if err != nil || dataLen < dataSize {
-			file.Seek(0, 0)
-			continue
+		w := 352
+		h := 288
+		dataSize := w * h * 3 / 2
+		data := make([]byte, dataSize)
+		// read yuv from file 103_RaceHorses_416x240p30_300.yuv
+		file, err := os.Open("../test_data/send_video_cif.yuv")
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			return
 		}
-		// senderCon.SendStreamMessage(streamId, data)
-		sender.SendVideoFrame(&agoraservice.ExternalVideoFrame{
-			Type:      agoraservice.VideoBufferRawData,
-			Format:    agoraservice.VideoPixelI420,
-			Buffer:    data,
-			Stride:    w,
-			Height:    h,
-			Timestamp: 0,
-		})
-		time.Sleep(33 * time.Millisecond)
-	}
+		defer file.Close()
+
+		for !*bStop {
+			dataLen, err := file.Read(data)
+			if err != nil || dataLen < dataSize {
+				file.Seek(0, 0)
+				continue
+			}
+			// senderCon.SendStreamMessage(streamId, data)
+			sender.SendVideoFrame(&agoraservice.ExternalVideoFrame{
+				Type:      agoraservice.VideoBufferRawData,
+				Format:    agoraservice.VideoPixelI420,
+				Buffer:    data,
+				Stride:    w,
+				Height:    h,
+				Timestamp: 0,
+			})
+			time.Sleep(33 * time.Millisecond)
+		}
 	*/
 	// rgag colos space type test
 	w := 360
@@ -209,19 +208,18 @@ func main() {
 			Height:    h,
 			Timestamp: 0,
 			/*
-			// for rgba with pure background color test
-			ColorSpace: agoraservice.ColorSpaceType{
-				MatrixId:    1,
-				PrimariesId: 1,
-				RangeId:     2, //or 2,
-				TransferId:  1,
-			},*/
+				// for rgba with pure background color test
+				ColorSpace: agoraservice.ColorSpaceType{
+					MatrixId:    1,
+					PrimariesId: 1,
+					RangeId:     2, //or 2,
+					TransferId:  1,
+				},*/
 		})
 		time.Sleep(33 * time.Millisecond)
 	}
 
 	//release now
-	
 
 	localUser.UnpublishVideo(track)
 	track.SetEnabled(false)
@@ -243,7 +241,7 @@ func main() {
 
 	track = nil
 	videoObserver = nil
-	
+
 	localUser = nil
 	conHandler = nil
 	con = nil

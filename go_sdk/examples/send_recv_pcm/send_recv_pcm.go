@@ -8,8 +8,8 @@ import (
 	_ "net/http/pprof"
 	"os"
 	"os/signal"
-	"time"
 	"strconv"
+	"time"
 
 	agoraservice "github.com/AgoraIO-Extensions/Agora-Golang-Server-SDK/v2/go_sdk/agoraservice"
 
@@ -44,7 +44,6 @@ func ReadFileToConsumer(file *os.File, consumer *agoraservice.AudioConsumer, int
 		}
 	}
 }
-
 
 func ConsumeAudio(audioConsumer *agoraservice.AudioConsumer, interval int, done chan bool) {
 	for {
@@ -89,14 +88,13 @@ func main() {
 
 	filepath := "../test_data/send_audio_16k_1ch.pcm"
 	if len(argus) > 3 {
-	    filepath = argus[3]
+		filepath = argus[3]
 	}
 	//default samplerate to 16k
 	samplerate := 16000
 	if len(argus) > 4 {
-	    samplerate, _ = strconv.Atoi(argus[4]) // strconv is in the "strconv" package, which is a standard package in Go's library.
+		samplerate, _ = strconv.Atoi(argus[4]) // strconv is in the "strconv" package, which is a standard package in Go's library.
 	}
-
 
 	// get environment variable
 	if appid == "" {
@@ -221,8 +219,8 @@ func main() {
 		OnAudioMetaDataReceived: func(localUser *agoraservice.LocalUser, uid string, metaData []byte) {
 			fmt.Printf("*****User audio meta data received, uid %s, meta: %s\n", uid, string(metaData))
 			//ret := "abc"
-			//retbytes := []byte(ret)	
-			
+			//retbytes := []byte(ret)
+
 			localUser.SendAudioMetaData(metaData)
 		},
 	}
@@ -239,12 +237,12 @@ func main() {
 	defer track.Release()
 
 	localUser := con.GetLocalUser()
-	
+
 	// for lixiang test
 	localUser.SetAudioScenario(agoraservice.AudioScenarioGameStreaming)
 	localUser.SetAudioEncoderConfiguration(&agoraservice.AudioEncoderConfiguration{AudioProfile: int(agoraservice.AudioProfileMusicHighQualityStereo)})
 
-	// end lixiang 
+	// end lixiang
 	con.Connect(token, channelName, userId)
 	<-conSignal
 
@@ -266,8 +264,6 @@ func main() {
 		return
 	}
 	defer file.Close()
-
-
 
 	audioConsumer := agoraservice.NewAudioConsumer(sender, samplerate, 1)
 	defer audioConsumer.Release()
@@ -291,7 +287,6 @@ func main() {
 	*/
 	go ReadFileToConsumer(file, audioConsumer, 50, done, samplerate*2/100)
 	go ConsumeAudio(audioConsumer, 50, done)
-
 
 	//release operation:cancel defer release,try manual release
 	for !(*bStop) {

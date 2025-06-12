@@ -47,7 +47,7 @@ func (localUser *LocalUser) UnregisterLocalUserObserver() int {
 	return localUser.connection.unregisterLocalUserObserver()
 }
 
-func (localUser *LocalUser) RegisterAudioFrameObserver(observer *AudioFrameObserver,enableVad int, vadConfigure *AudioVadConfigV2) int {
+func (localUser *LocalUser) RegisterAudioFrameObserver(observer *AudioFrameObserver, enableVad int, vadConfigure *AudioVadConfigV2) int {
 	return localUser.connection.registerAudioFrameObserver(observer, enableVad, vadConfigure)
 }
 
@@ -243,7 +243,7 @@ func (localUser *LocalUser) SetAudioVolumeIndicationParameters(intervalInMs int,
 	if localUser.cLocalUser == nil {
 		return -1
 	}
-	
+
 	ret := C.agora_local_user_set_audio_volume_indication_parameters(localUser.cLocalUser, C.int(intervalInMs), C.int(smooth), C.bool(reportVad))
 	return int(ret)
 }
@@ -253,7 +253,7 @@ func (localUser *LocalUser) SendAudioMetaData(metaData []byte) int {
 	}
 	cMetaData := C.CBytes(metaData)
 	defer C.free(cMetaData)
-	
+
 	ret := C.agora_local_user_send_audio_meta_data(localUser.cLocalUser, (*C.char)(cMetaData), (C.size_t)(len(metaData)))
 	return int(ret)
 }

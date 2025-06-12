@@ -63,11 +63,10 @@ func (sender *AudioEncodedFrameSender) Release() {
 
 func (sender *AudioEncodedFrameSender) SendEncodedAudioFrame(payload []byte, frameInfo *EncodedAudioFrameInfo) int {
 
-	
-	if frameInfo == nil || payload == nil  || sender.closed || len(payload) == 0{
+	if frameInfo == nil || payload == nil || sender.closed || len(payload) == 0 {
 		return -1
 	}
-   
+
 	sender.mu.Lock()
 	defer sender.mu.Unlock()
 	// check if sender is closed or not initialized

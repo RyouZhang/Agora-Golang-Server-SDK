@@ -63,9 +63,8 @@ func main() {
 	svcCfg.AppId = appid
 
 	agoraservice.Initialize(svcCfg)
-	
+
 	mediaNodeFactory := agoraservice.NewMediaNodeFactory()
-	
 
 	conCfg := agoraservice.RtcConnectionConfig{
 		AutoSubscribeAudio: true,
@@ -125,7 +124,6 @@ func main() {
 		},
 	}
 	con := agoraservice.NewRtcConnection(&conCfg)
-	
 
 	localUser := con.GetLocalUser()
 	con.RegisterObserver(conHandler)
@@ -158,22 +156,19 @@ func main() {
 	}
 
 	// release resource
-	
+
 	localUser.UnregisterAudioFrameObserver()
 	localUser.UnregisterAudioFrameObserver()
 	localUser.UnregisterLocalUserObserver()
 
-	
 	con.Disconnect()
 	//<-OnDisconnectedSign
 	con.UnregisterObserver()
 
 	con.Release()
 
-	
 	mediaNodeFactory.Release()
 	agoraservice.Release()
-
 
 	localUserObserver = nil
 	localUser = nil
@@ -181,5 +176,5 @@ func main() {
 	con = nil
 
 	fmt.Printf("App exited\n")
-	
+
 }

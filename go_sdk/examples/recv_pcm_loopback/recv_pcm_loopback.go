@@ -209,42 +209,42 @@ func main() {
 	localUser.PublishAudio(track)
 
 	/*
-	// disalbe pre-load audio data from version 2.1.x, by wei
-	// all use build-in function for low-latency
+		// disalbe pre-load audio data from version 2.1.x, by wei
+		// all use build-in function for low-latency
 
-	frame := &agoraservice.AudioFrame{
-		Type:              agoraservice.AudioFrameTypePCM16,
-		SamplesPerChannel: 160,
-		BytesPerSample:    2,
-		Channels:          1,
-		SamplesPerSec:     16000,
-		Buffer:            make([]byte, 320),
-		RenderTimeMs:      0,
-	}
-
-	file, err := os.Open("../test_data/send_audio_16k_1ch.pcm")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	//track.AdjustPublishVolume(100)
-
-
-	sendCount := 0
-
-	// send 180ms audio data
-	for i := 0; i < 18; i++ {
-		dataLen, err := file.Read(frame.Buffer)
-		if err != nil || dataLen < 320 {
-			fmt.Println("Finished reading file:", err)
-			break
+		frame := &agoraservice.AudioFrame{
+			Type:              agoraservice.AudioFrameTypePCM16,
+			SamplesPerChannel: 160,
+			BytesPerSample:    2,
+			Channels:          1,
+			SamplesPerSec:     16000,
+			Buffer:            make([]byte, 320),
+			RenderTimeMs:      0,
 		}
-		sendCount++
-		ret := sender.SendAudioPcmData(frame)
-		fmt.Printf("SendAudioPcmData %d ret: %d\n", sendCount, ret)
-	}
+
+		file, err := os.Open("../test_data/send_audio_16k_1ch.pcm")
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+			return
+		}
+		defer file.Close()
+
+		//track.AdjustPublishVolume(100)
+
+
+		sendCount := 0
+
+		// send 180ms audio data
+		for i := 0; i < 18; i++ {
+			dataLen, err := file.Read(frame.Buffer)
+			if err != nil || dataLen < 320 {
+				fmt.Println("Finished reading file:", err)
+				break
+			}
+			sendCount++
+			ret := sender.SendAudioPcmData(frame)
+			fmt.Printf("SendAudioPcmData %d ret: %d\n", sendCount, ret)
+		}
 	*/
 
 	//added by wei for loop back

@@ -7,17 +7,16 @@ package agoraservice
 import "C"
 import "unsafe"
 
-
-  type ColorSpaceType struct {
+type ColorSpaceType struct {
 	// The indices are equal to the values specified in T-REC H.273 Table 2.
 	PrimariesId int
 	// The indices are equal to the values specified in T-REC H.273 Table 3.
-	TransferId  int
+	TransferId int
 	// The indices are equal to the values specified in T-REC H.273 Table 4.
-	MatrixId    int
+	MatrixId int
 	// The indices are equal to the values specified at
 	// https://www.webmproject.org/docs/container/#colour for the element Range.
-	RangeId     int
+	RangeId int
 }
 
 // ExternalVideoFrame represents an external video frame.
@@ -72,9 +71,9 @@ type ExternalVideoFrame struct {
 	// The default value is 0.
 	AlphaMode int
 	/*
-  *  The color_space_type
-  */
-  ColorSpace ColorSpaceType;
+	 *  The color_space_type
+	 */
+	ColorSpace ColorSpaceType
 }
 
 // VideoFrame represents a video frame.
