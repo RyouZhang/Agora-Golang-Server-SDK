@@ -298,6 +298,8 @@ func (localUser *LocalUser) UnpublishAudio(track *LocalAudioTrack) int {
 	if ret != 0 {
 		localUser.publishFlag = true
 	}
+	// unset audiotrack
+	localUser.audioTrack = nil
 	return ret
 }
 
